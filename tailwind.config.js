@@ -13,6 +13,11 @@ module.exports = {
         myBlue: "#0A32B3",
         myPink: "#BD365D",
       },
+      backgroundImage: (theme) => ({
+        pattern:
+        "url('https://th.bing.com/th/id/OIP.BzH_3k-t3gzwZs8K2q1mNQHaNL?w=202&h=328&c=7&r=0&o=5&dpr=1.5&pid=1.7')",
+
+      }),
 },
   },
   plugins: [],
