@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import Input from '../components/Input';
 import Button from '../components/Button';
+import { BE_signUp } from '../Backend/Queries';
 const Login = () => {
     const [login, setLogin ] = useState(true);
     const [email, setEmail] = useState("");
@@ -9,7 +10,7 @@ const Login = () => {
     
     const handleSignup = () => {
         const data = {email, password, confirmPassword}
-        console.log(data)
+        BE_signUp(data);
     };
     const handleSignin = () => {
         const data = {email, password }
