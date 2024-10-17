@@ -1,6 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { userType } from "../Types";
+
+
+export const defaultUser:userType = {
+    id:"",
+    username:"",
+    email:"",
+    isOnline:false,
+    img:"",
+    creationTime:"",
+    lastseen:"", 
+    bio:"", 
+
+};
 
 const initialState = {
+    //user:[],
+    currentUser: defaultUser,
+    //currentSelectedUser: null
 
 }
 
@@ -9,7 +26,13 @@ const userSlice = createSlice({
     initialState,
     reducers:{
         setUser:(state,action) => {
-            // set current user
+          const user = action.payload;
+            // store user in local storage
+            localStorage.setItem("react-project_user",JSON.stringify(user));
+
+
+            state.currentUser = user;
+
         },
         setUsers:(state,action) => {
             // set all users

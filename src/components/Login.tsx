@@ -1,20 +1,42 @@
 import React, {useState} from 'react';
 import Input from '../components/Input';
 import Button from '../components/Button';
-import { BE_signUp } from '../Backend/Queries';
+import { BE_signIn, BE_signUp } from '../Backend/Queries';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../Redux/store';
+import { authDataType } from '../Types';
 const Login = () => {
     const [login, setLogin ] = useState(true);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [signUpLoading, setSignUpLoading] = useState(false);
+    const [signInLoading, setSignInLoading] = useState(false);
+    const goTo = useNavigate();
+    const dispatch = useDispatch<AppDispatch>();
     
     const handleSignup = () => {
         const data = {email, password, confirmPassword}
-        BE_signUp(data);
+        auth(data, BE_signUp, setSignUpLoading);
     };
     const handleSignin = () => {
-        const data = {email, password }
-        console.log(data)
+        const data = {email, password };
+        auth(data, BE_signIn, setSignInLoading);
+    };
+    const auth = (
+        data:authDataType,
+        func:any, 
+        setLoading:React.Dispatch<React.SetStateAction<boolean>>
+ ) => {
+    func(data, setLoading, reset, goTo, dispatch)
+
+    };
+    
+    const reset = () => {
+        setEmail(""); 
+        setPassword("");
+        setConfirmPassword("");
     };
 
     return (
@@ -41,12 +63,20 @@ const Login = () => {
                 
                 {login ? (
                     <>
-                    <Button text='Login'  onClick={handleSignin}/>
+                    <Button 
+                    text='Login' 
+                    onClick={handleSignin}
+                    loading={signInLoading  }
+                     
+                     />
                     <Button onClick={() => setLogin(false)} text='Register' secondary  />   
                     </>
                 ) : (
                     <>
-                    <Button text='Registration' onClick={handleSignup} />
+                    <Button text='Registration' 
+                    onClick={handleSignup}
+                    loading={signUpLoading}
+                    />
                     <Button onClick={() => setLogin(true)} text='Login' secondary  />
                     </>
                 )}; 
@@ -56,3 +86,4 @@ const Login = () => {
 };
 
 export default Login;
+//video 18 teaches how to navigate to other pages
