@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword } from "@firebase/auth";
+import { createUserWithEmailAndPassword, signOut } from "@firebase/auth";
 import { auth, db } from "./Firebase";
 import { toastErr } from "../utils/toast";
 import CatchErr from "../utils/catchErr";
@@ -6,7 +6,7 @@ import { authDataType, setLoadingType, userType } from "../Types";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import {  NavigateFunction } from "react-router-dom";
 import { doc, getDoc, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
-import { defaultUser, setUser } from "../Redux/userSlice"; 
+import { defaultUser, setUser  } from "../Redux/userSlice"; 
 import { AppDispatch } from "../Redux/store";
 import convertTime from "../utils/convertTime";
 import AvatarGenerator from "../utils/avatarGenerator";
@@ -89,6 +89,28 @@ export const BE_signUp = (
         }); 
     };
 
+    export const BE_signOut = (dispatch:AppDispatch, goTo:NavigateFunction, setLoading:setLoadingType) => {
+        setLoading(true);
+        signOut(auth).then(async() => {
+              //route auth page
+         goTo("auth")
+
+         await updateUserInfo({isOffline:true});
+ 
+         dispatch(setUser(defaultUser));
+ 
+         localStorage.removeItem(" userStorageName");
+
+         setLoading(false);
+        }).catch(err => CatchErr(err));
+    };
+
+    export const getStorageUser = () => {
+        const usr = localStorage.getItem(" userStorageName")
+        if (usr) return JSON.parse(usr) 
+            else return null
+    }
+
     // add user to collection      
   const addUserToCollection = async (id:string, email:string, username:string, img:string)  => {
     await setDoc(doc(db, usersCall, id), { 
@@ -157,8 +179,3 @@ export const BE_signUp = (
         });
     }    
 };
-const getStorageUser = () => {
-    const usr = localStorage.getItem("react-project_user")
-    if (usr) return JSON.parse(usr) 
-        else return null
-}

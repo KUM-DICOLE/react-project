@@ -1,6 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { userType } from "../Types";
 
+export const userStorageName = "react-project_user";
+
 
 export const defaultUser:userType = {
     id:"",
@@ -28,7 +30,7 @@ const userSlice = createSlice({
         setUser:(state,action) => {
           const user = action.payload;
             // store user in local storage
-            localStorage.setItem("react-project_user",JSON.stringify(user));
+            localStorage.setItem(" userStorageName",JSON.stringify(user));
 
 
             state.currentUser = user;
